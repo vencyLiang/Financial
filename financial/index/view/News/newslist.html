@@ -1,0 +1,16 @@
+﻿<div class='news-box' id='news-box'>
+    <ul class='news' id='news-list'>
+        {foreach $list as $key=>$value}
+        {if $key%2!==0}
+        <li class='whitestyle'><a href="{:url('News/view','id='.$value.id)}">{$value.title}<span>{$value.pubtime|date="Y-m-d H:i:s",###}</span></a></li>
+        {else}
+        <li class='darkstyle'><a href="{:url('News/view','id='.$value.id)}">{$value.title}<span>{$value.pubtime|date="Y-m-d H:i:s",###}</span></a></li>
+        {/if}
+        {/foreach}
+    </ul>
+    <div class='Page clearfix' id='pageCodesArea'>
+        {$page}
+    </div>
+    </div>
+
+

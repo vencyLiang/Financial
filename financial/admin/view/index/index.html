@@ -1,0 +1,102 @@
+﻿{include file="public/meta"}
+
+
+<title>后台管理</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+</head>
+<body>
+
+{include file="public/header"}
+{include file="public/menu"}
+
+
+<section class="my-article-box">
+	<nav class="breadcrumb"><i class="my-iconfont"></i> <a href="/" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">我的桌面</span> 
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="my-iconfont">&#xe68f;</i></a></nav>
+	<div class="my-article">
+		<article class="cl pd-20">
+			<p class="f-20 text-success">欢迎 <b style="color:grey"> {$adminUsername} </b>登录后台管理系统！</p>
+			<p>登录次数：{$loginTimes} </p>
+			<p>上次登录IP：{$recLoginIP} 上次登录时间：{$recLoginTime|date="Y-m-d H点i分s秒",###}</p>
+			<table class="table table-border table-bordered table-bg">
+				<thead>
+					<tr>
+						<th colspan="7" scope="col">信息统计</th>
+			</tr>
+					<tr class="text-c">
+						<th>统计</th>
+						<th>资讯库</th>
+						<th>用户</th>
+						<th>管理员</th>
+			</tr>
+		</thead>
+				<tbody>
+					<tr class="text-c">
+						<td>总数</td>
+						<td>{$totalNews}</td>
+						<td>{$totalUsers}</td>
+						<td>{$totalAdmin}</td>
+			</tr>
+					<tr class="text-c">
+						<td>今日</td>
+						<td>0</td>
+						<td>0</td>
+						<td>0</td>
+			</tr>
+					<tr class="text-c">
+						<td>昨日</td>
+						<td>0</td>
+						<td>0</td>
+						<td>0</td>
+			</tr>
+					<tr class="text-c">
+						<td>本周</td>
+						<td>2</td>
+						<td>0</td>
+						<td>0</td>
+			</tr>
+					<tr class="text-c">
+						<td>本月</td>
+						<td>2</td>
+						<td>0</td>
+						<td>0</td>
+			</tr>
+		</tbody>
+	</table>
+			<table class="table table-border table-bordered table-bg mt-20">
+				<thead>
+					<tr>
+						<th colspan="2" scope="col">服务器信息</th>
+			</tr>
+		</thead>
+				<tbody>
+				{foreach $serverInfo as $key=>$value}
+					<tr>
+						<td>{$key}</td>
+						<td>{$value}</td>
+			</tr>
+				{/foreach}
+		</tbody>
+	</table>
+			<footer class="footer mt-20">
+				<div class="container">
+					<p>Copyright &copy;2017 寒夜飘星 All Rights Reserved.</p>
+				</div>
+			</footer>
+</article>
+		
+</div>
+
+
+</section>
+
+{include file="public/footer"}
+<script type="text/javascript" src="_ADMINLIB_/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="_ADMINLIB_/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="_ADMINLIB_/laypage/1.2/laypage.js"></script>
+
+</body>
+</html>

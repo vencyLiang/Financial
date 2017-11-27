@@ -1,0 +1,182 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="_ADMINLOGINJS_/html5shiv.js"></script>
+<script type="text/javascript" src="_ADMINLOGINJS_/respond.min.js"></script>
+<![endif]-->
+<link href="_ADMINLOGINCSS_/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="_ADMINLOGINCSS_/login.css" rel="stylesheet" type="text/css" />
+<link href="_ADMINLOGINCSS_/my-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="_ADMINLOGINJS_/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>后台登录</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<script type="text/javascript" src="_COMMON_/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="_ADMINLOGINJS_/H-ui.min.js"></script>
+  <script>
+      //当提交按钮为可点状态时，点击它，检查表单，满足条件，表单提交，不满足时，变为不可点状态。
+      function checkSubmit() {
+          if($("#usernameTip").text() === "√用户密码验证通过" && $("#codeTip").text() === "√验证码输入正确"){
+          document.getElementById('loginform').submit();
+          }else{
+              $(this).attr("disabled", "disabled");
+          }
+      }
+      //点击"看不清"时调用的刷新验证码的函数；
+      function refresh() {
+          $("#vcode").attr('src',"{:url('Login/verifyCode')}?"+Math.random());
+      }
+      //本页面加载完毕后：
+      $(function(){
+          $('#vcode').click(function () {
+              $(this).attr('src',"{:url('Login/verifyCode')}?"+Math.random());
+          });
+          $("#username").focus(function () {
+              $("#reg").attr("disabled", "disabled");
+              $("#password").attr('disabled','disabled');
+              $("#captcha").attr('disabled','disabled');
+              $("#usernameTip").html("");
+          });
+          $("#username").blur(function () {
+            var tip;
+            $.ajax({
+              "url":"{:url('Login/regAjax')}",
+              "data":{'username':$("#username").val()},
+              "type":"get",
+              "success":function (response) {
+                  if ($("#username").val() === "") {
+                      var responseObj = $.parseJSON(response, true);
+                      tip = responseObj.msg;
+                  } else{
+                      //alert(response);
+                      //return false;
+                      tip = $.parseJSON(response, true);
+                  }
+                  $("#usernameTip").html(tip);
+                  //判断语句不写在Ajax外，是因为在处理异步数据的同时，js程序仍会向后执行。
+                  if($("#usernameTip").text() === "√该用户存在"){
+                      $("#password").removeAttr('disabled');
+                      //$('#reg').removeAttr("disabled");
+                  }else{
+                      $("#password").attr('disabled','disabled');
+                      $("#reg").attr("disabled", "disabled");
+                      $("#captcha").attr('disabled','disabled');
+                  }
+              }
+            });
+          });
+          $("#password").focus(function () {
+              $("#reg").attr("disabled", "disabled");
+              $("#captcha").attr('disabled','disabled');
+              $("#passwordTip").html("");
+              if($("#usernameTip").text()!==""){
+                  $("#usernameTip").html("<b style='font-weight:bold;color:green'>√该用户存在</b>")
+              }
+          });
+          $("#password").blur(function () {
+              if($(this).val()===""){
+                  $("#passwordTip").html("<b style='font-weight:bold;color:red'>×密码不能为空</b>");
+                  return false;
+              }
+              if($(this).val().length<6){
+                  $("#passwordTip").html("<b style='font-weight:bold;color:red'>×密码不能少于6位</b>");
+                  return false;
+              }
+              $.ajax({
+                  "url":"{:url('Login/regAjax')}",
+                  "data":{'username':$("#username").val(),'password':$("#password").val()},
+                  "type":"get",
+                  "success":function (response) {
+                      $("#passwordTip").empty();
+                      $("#usernameTip").html($.parseJSON(response));
+                      if($("#usernameTip").text() === "√用户密码验证通过"){
+                          $('#captcha').removeAttr("disabled");
+                      }else{
+                          $("#password").val('');
+                          $("#captcha").attr("disabled", "disabled");
+                          $("#reg").attr("disabled", "disabled");
+                      }
+                  }
+              });
+          });
+
+          $("#captcha").focus(function () {
+              $("#reg").attr("disabled", "disabled");
+              $("#codeTip").html("");
+          });
+          $("#captcha").blur(function () {
+              var tip;
+              $.ajax({
+                  "url":"{:url('Login/checkVerifyCode')}",
+                  "data":{'vcode':$("#captcha").val()},
+                  "type":"get",
+                  "success":function (response) {
+                          tip = response;
+                      if(tip){
+                          $("#codeTip").html("<b style='font-weight:bold;color:green'>√验证码输入正确</b>");
+                          $('#reg').removeAttr("disabled");
+                      }else{
+                          $("#codeTip").html("<b style='font-weight:bold;color:red'>×请核对验证码</b>");
+                          $("#reg").attr("disabled", "disabled");
+                      }
+                  }
+              });
+          });
+      });
+  </script>
+</head>
+<body>
+<div class="header"></div>
+<div class="loginWraper">
+  <div  class="loginBox">
+    <form class="form form-horizontal" id="loginform" action="{:url('admin/Login/check')}" method="post">
+      <div class="row cl">
+        <label class="form-label col-xs-3"><i class="my-iconfont" style="color:burlywood ">&#xe60d;</i></label>
+        <div class="formControls col-xs-8">
+          <input id="username" name="username" type="text" placeholder="账户" class="input-text size-L">
+        </div>
+      </div>
+      <div class="row cl">
+        <label class="form-label col-xs-3"><i class="my-iconfont" style="color:burlywood ">&#xe60e;</i></label>
+        <div class="formControls col-xs-8">
+          <input id="password" name="password" type="password" value="" placeholder="密码" class="input-text size-L" disabled="disabled">
+        </div>
+      </div>
+      <div style="margin:0 auto;text-align: center">
+        <div style="display: inline" id = "usernameTip"></div>&nbsp;&nbsp;
+        <div style="display: inline" id = "passwordTip"></div>
+        <div style="display: inline" id = "codeTip"></div>
+      </div>
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <input class="input-text size-L" type="text" id='captcha' disabled='disabled' placeholder="验证码" name="vcode" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;">
+          <img src="{:url('Login/verifyCode')}" id="vcode"> <a class="vcode" href="javascript:refresh();" style="color:burlywood ">看不清，换一张</a> </div>
+      </div>
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3" style="color:burlywood ">
+          <label for="online">
+            <input type="checkbox" name="remember" id="online" value="1">
+            使我保持登录状态</label>
+        </div>
+      </div>
+      <div class="row cl">
+        <div class="formControls col-xs-8 col-xs-offset-3">
+          <input id= "reg" type="button" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;"  disabled="disabled" onclick="checkSubmit()">
+          <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;重&nbsp;&nbsp;&nbsp;&nbsp;填&nbsp;">
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="footer">Copyright by 寒夜飘星 All Right Reserved</div>
+</body>
+</html>

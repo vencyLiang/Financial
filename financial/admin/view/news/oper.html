@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .t1{
+            border-left:1px solid;
+        }
+        .t1{
+            border-right: 1px;
+        }
+    </style>
+    <script src="_JS_jquery-1.7.2.min.js"></script>
+    <script src="_JS_jquery-ui-1.10.3.custom.js"></script>
+    <link rel="stylesheet" href="_CSS_jquery-ui-1.10.3.custom.css"/>
+    <script>
+        function getPage(url) {
+            $.get(url, function(response) {
+                    //使用jquery html 加载URL
+                    $("#listArea").html(response);
+                }
+                //$("#curPageListArea").html(response);
+            );
+        }
+        $(function () {
+            var itemObj = $(".item");
+            $("#button1").click(function (){
+                itemObj.attr('checked','checked');
+            });
+            $("#button2").click(function (){
+                for(var i=0; i<itemObj.length;i++){
+                    itemObj[i].checked = !itemObj[i].checked
+                }
+            });
+            $("#button3").click(function (){
+                for(var i=0; i<itemObj.length;i++){
+                    itemObj.attr('checked',false);
+                }
+            });
+
+            $("#button4").click(function () {
+                var checkedNum = 0;
+                for(var i=0;i<itemObj.length;i++){
+                    if(itemObj[i].checked===true) {
+                        checkedNum += 1;
+                    }
+                }
+                if (checkedNum===0) {
+                    alert('请勾选欲删除的条目！');
+                } else{
+                    var tip;
+                    $.ajax({
+                    "url": "{:url('News/delete')}",
+                    "data": $("form").serialize(),
+                    "type": "post",
+                    "success": function (response) {
+                        tip = $.parseJSON(response.msg, true);
+                        alert(tip);
+                        //刷新当前页面；
+                        location.reload();
+                    }
+                });
+            }
+            });
+            $("#button5").click(function () {
+                var checkedNum = 0;
+                for(var i=0;i<itemObj.length;i++){
+                    if(itemObj[i].checked===true) {
+                        checkedNum += 1;
+                    }
+                }
+                if (checkedNum===0) {
+                    alert('请勾选欲推荐的条目！');
+                } else{
+                    var tip;
+                    $.ajax({
+                        "url": "{:url('News/propose')}",
+                        "data": $("#form2").serialize(),
+                        "type": "post",
+                        "success": function (response) {
+                            tip = $.parseJSON(response.msg, true);
+                            alert(tip);
+                        }
+                    });
+                }
+            });
+            $("#button6").click(function () {
+                var checkedNum = 0;
+                for(var i=0;i<itemObj.length;i++){
+                    if(itemObj[i].checked===true) {
+                        checkedNum += 1;
+                    }
+                }
+                if (checkedNum===0) {
+                    alert('请勾选欲取消推荐的条目！');
+                } else{
+                    var tip;
+                    $.ajax({
+                        "url": "{:url('News/cancelPropose')}",
+                        "data": $("#form2").serialize(),
+                        "type": "post",
+                        "success": function (response) {
+                            tip = $.parseJSON(response.msg, true);
+                            alert(tip);
+                        }
+                    });
+                }
+            });
+            $(".selectTime").click(function () {
+
+            $(".selectTime").datepicker({
+                "changeYear":true,
+                "changeMonth":true,
+                "yearRange":"1997:2027"
+            });
+            });
+
+            $(".pagination a").click(function() {
+                var page = $(this).attr("href");
+                getPage(page);
+                //禁止A标签跳转
+                return false;
+            }) ;
+        });
+    </script>
+</head>
+
+<div id="listArea">
+<form id="form1" method="get" action="{:url('news/oper')}">
+<div style="color: #1A66B9;font-weight:bold">
+    新闻搜索：<input type="text" name="searchKeywords">
+    &nbsp;<select name ="searchType">
+        <option value="title">标题</option>
+        <option value="content">内容</option>
+    </select>
+    &nbsp;<input type="checkbox" name ="status" value="1"><span style="font-weight: bold;color: #1b1b1b" >推荐</span>
+    &nbsp;<input type="submit" id = "search" value="搜索"><br>
+发布时间：<input type="text" name="from" class="selectTime">-<input type="text" name="to" class="selectTime">
+</div>
+<br>
+</form>
+<input type="button" id="button1" value="全选">&nbsp;<input type="button" id="button2" value="反选">&nbsp;<input type="button" id="button3" value="全不选">
+<form id="form2">
+    <table >
+    <tr><th>请选择</th>
+        <th>新闻id</th>
+        <th>新闻标题</th>
+        <th>所属分类</th>
+        <th>发表时间</th>
+        <th>添加者</th>
+        <th>操作</th>
+    </tr>
+    {volist name="list" id="vo"}
+    <tr><td><input class="item" type="checkbox" name="checkbox[]" value="{$vo.id}"/></td>
+        <td>{$vo.id}</td>
+        <td>{$vo.title}</td>
+        <td>{$vo.curtypename}</td>
+        <td>{$vo.pubtime|date="Y-m-d H点i分s秒",###}</td>
+        <td>{$vo.adminName}</td>
+        <td><a href="{:url('News/getUpdate','id='.$vo.id)}"> [修改]</a></td>
+    </tr>
+    {/volist}
+</table>
+</form>
+<input type="button" id="button4" value="批量删除">&nbsp;<input type="button" id="button5" value="批量推荐">&nbsp;<input type="button" id="button6" value="取消推荐">
+{$page}
+</div>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+﻿<!--_meta 作为公共模版分离出去-->
+{include file="public/meta"}
+<!--/meta 作为公共模版分离出去-->
+
+<title>产品分类</title>
+<link rel="stylesheet" href="_ADMINLIB_/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+</head>
+<body>
+<section class="my-article-box">
+	<div class="my-article">
+		<article class="cl pd-20">
+					<div class="pd-20">
+						<form action="{:url('type/updateSave')}" method="post" class="form form-horizontal" id="form-user-add">
+							<div class="row cl">
+								<label class="form-label col-xs-4 col-sm-2"><span class="c-red ">*</span>分类名称：</label>
+								<div class="formControls col-5">
+									<input type="text" class="input-text inline" value="{$tname}" placeholder=""  id="tname" name="tname">
+								</div>
+								<div class="col-5"> </div>
+							</div>
+							<div class="row cl">
+								<label class="form-label col-xs-4 col-sm-2"><span class="c-red ">*</span>上级分类：</label>
+								<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box inline">
+				<select name="parentId" class="select">
+                  <option value="0">根分类</option>
+    				{if $allUpTypes}
+							{foreach $allUpTypes as $type}
+							{if $type.id==$parentId}
+							<option value="{$type.id}"  selected="selected" >{:str_repeat('----',$type.level)}{$type.tname}</option>
+							{else}
+							<option value="{$type.id}">{:str_repeat('----',$type.level)}{$type.tname}</option>
+							{/if}
+							{/foreach}
+							{/if}
+				</select>
+				</span>
+								</div>
+								<div class="col-5"> </div>
+							</div>
+							<div class="row cl">
+								<div class="col-9 col-offset-2">
+									<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+									<input type="hidden" name="id" value="{$id}"/>
+								</div>
+							</div>
+						</form>
+					</div>
+		</article>
+	</div>
+</section>
+					<!--_footer 作为公共模版分离出去-->
+					{include file="public/footer"}
+					</body>
+					</html>
+
+<!--_footer 作为公共模版分离出去-->
+{include file="public/footer"}
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="_ADMINLIB_/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="_ADMINLIB_/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="_ADMINLIB_/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="_ADMINLIB_/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
+</body>
+</html>

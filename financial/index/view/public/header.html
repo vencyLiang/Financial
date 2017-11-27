@@ -1,0 +1,118 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>深圳亿升金融服务有限公司</title>
+    <meta name="description" content="深圳亿升金融服务有限公司作为国内知名金融信息咨询服务机构，汇集银行、证券、基金、信托等业界精英，深度钻研于各金融领域。 贯彻和落实国家和地方政府相关政策与制度，发挥专业机构优势，促进城市发展与金融的高度融合。" />
+    <meta name="keywords" content="亿升财富,亿升金融,政府融资,平台融资,PPP项目融资,政府项目合作,PPP合作,资金合作" />
+    <link type="text/css" href="_FRONTCSS_/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="_FRONTJS_/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="_FRONTJS_/superslide.2.1.js"></script>
+    <script type="text/javascript" src="_FRONTJS_/jquery.cookie.js"></script>
+    <script type="text/javascript">
+        function getPage(url) {
+            $.get(url, function(data) {
+                var response = $.parseJSON(data);
+               var list = response.listArea;
+              var page = response.pageArea;
+                $("#news-list").html(list);
+                $("#pageCodesArea").html(page);
+            });
+        }
+        $(function () {
+            //获得当前地址栏的URL；
+            var currentUrl = location.href;
+            //去掉http:
+            currentUrl=currentUrl.substr(7);
+            //把域名部分按/分割
+            var urlUnits = currentUrl.split("/");
+           //判断是否为首页，因为tp只有首页才可以省略模块、控制器就可以访问。
+            if(urlUnits.length<=2||urlUnits[2]===""){
+                $(".nav a:eq(0)").parent().attr('class','active');
+            }
+            //urlUnits[2]为当前网页对应的模块名；
+            var currentColumn = urlUnits[2];
+            var columnObject = $(".nav a");
+            for(var i=0;i<columnObject.length;i++){
+                //遍历该节点，找出各自的href,并分割成数组，其中第3个就是各自栏目对应的模块名；
+               var herfUnits = columnObject.eq(i).attr('href').split('/');
+                if(herfUnits[2]===currentColumn){
+                  columnObject.eq(i).parent().attr('class','active')
+              }
+           }
+            //以上代码的功能是，使当前页面对应的导航条栏目高亮。
+            if($(".active>a").text()==="网站首页"){
+                $(".header-nav").css({"position": "absolute", "height": "55px"," background-color":"rgba(21, 45, 71, 0.78)", "top": "86px", "width": "100%", "z-index": "999"});
+                var checkMobile = "<div class='mask'><div class='message-box'><a href='javascript:void(0)' class='goMobile'><i class='phone'></i>进入移动版</a><a href='javascript:void(0)' class='closeLayer'><i class='mac'></i>留在电脑版</a></div></div>";
+                $(".container:eq(0)").before(checkMobile);
+            }
+        // 判断设备是否为手机
+        if(/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))){
+            if($.cookie("isClose") != 'yes'){
+                // 首先
+                $(".mask").show();
+                var swinHig = $('.message-box').height()*-1;
+                var winHig = $(window).height()/5;
+                $(".message-box").css({"marginTop":swinHig}); //自上而下
+                $(".message-box").show();
+                $(".message-box").animate({"marginTop":winHig},1000);
+                $(".message-box .closeLayer").click(function(){
+                    $(this).parent().fadeOut(500);
+                    $(".mask").hide();
+                    $.cookie("isClose",'yes',{ expires:1});  //1天内有效
+                });
+                $(".message-box .goMobile").click(function(){
+                    // $.cookie("isClose",'yes',{ expires:1});  //1天内有效
+                    window.location.href = 'http://www.mycodes.net';
+                });
+            }
+        }
+        //以下代码的功能是点击相应的栏目后，该栏目高亮，其它栏目不高亮。
+            $(".nav>li").click(function () {
+                $(this).attr('class','active');
+                $(this).siblings().removeAttr('class');
+
+            });
+
+            $(".pagecodes a").click(function(e) {
+                var page = $(this).attr("href");
+                getPage(page);
+                //禁止浏览器事件；
+                e.preventDefault();
+                //return false;
+
+            });
+
+
+        });
+    </script>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header">
+        <div class="header-company">
+            <div class="company-logo">
+                <img src="_FRONTPIC_/logo.png" alt="亿升财富">
+            </div>
+            <div class="company-tel">
+                <div class="tel-title"><i class="icon-tel"></i> 客服热线：</div>
+                <div class="tel-num">400-661-1313</div>
+            </div>
+        </div>
+        <div class="header-nav" >
+            <ul class="nav">
+                <li ><a href="{:url('index/Index/index')}">网站首页</a></li>
+
+                <li><a href="{:url('index/Aboutus/index')}">企业简介</a></li>
+
+                <li><a href="{:url('index/News/index')}">行业新闻</a></li>
+
+                <li ><a href="{:url('index/Cooperation/index')}">商务合作</a></li>
+
+                <li ><a href="{:url('index/Agent/index')}">区域代理</a></li>
+
+                <li ><a href="{:url('index/Contactus/index')}">联系我们</a></li>
+
+            </ul>
+        </div>
+    </div>

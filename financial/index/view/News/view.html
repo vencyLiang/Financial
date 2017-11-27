@@ -1,0 +1,41 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+{include file="public/header"}
+<body>
+    <div class="sub-banner-box">
+      <div class="sub-banner">
+       <img src="_FRONTPIC_/list-img.jpg">
+     </div>
+   </div>
+   <div class="sub-title">
+     <img src="_FRONTPIC_/list-title-img.jpg">
+   </div>
+
+   <div class="sub-class-bg">
+    <div class="sub-class">
+      
+      <a href="/news/companynotices/">公司公告</a> <span>|</span>
+      
+      <a href="/news/companynews/">公司新闻</a> <span>|</span>
+      
+      <a href="/news/industryinformations/">行业资讯</a> <span>|</span>
+    </div>
+  </div>
+
+  <div class="news-box">
+    <div class="view">
+      <h1>{$title}</h1>
+      <p class="date">发布时间：{$pubtime|date="Y-m-d H:i",###}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;来源：{$source} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;编辑：{$adminName}</p>
+    </div>
+    <div class="pagebox">
+      {$content}
+    </div>  
+    <div class="page">
+        <p>上一篇：{if $preNewsId}<a href="{:url('News/view','id='.$preNewsId)}">{/if}{$preNewsTitle}</a> </p>
+        <p>下一篇：{if $nextNewsId}<a href="{:url('News/view','id='.$nextNewsId)}">{/if}{$nextNewsTitle}</a> </p>
+      <a href="#" onclick="javascript:history.go(-1);" class="back">[返回列表]</a>
+    </div>
+  </div>
+</div>
+  {include file="public/footer"}
+</body>
+
