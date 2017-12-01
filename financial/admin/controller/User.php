@@ -11,6 +11,7 @@ use app\common\model\User as UserModel;
 use think\db\Query;
 use think\Request;
 use think\Db;
+use log\Log;
 
 
 class User extends Base{
@@ -59,6 +60,8 @@ class User extends Base{
         $user = new UserModel();
         //根据主键删除 $news->delete($id) $id为string 或者 array
         $res = $user->where('id', 'IN', $id)->delete();
+        $config = ['act'=>'delete','object'=>'user','result'=>$res];
+        Log::writeLog($config);
         if ($res) {
             $this->success(json_encode('用户删除成功'));
         } else {
@@ -68,9 +71,10 @@ class User extends Base{
 
     function singleDelete(){
         $id = Request::instance()->param('id');
-        $user = new UserModel();
         //根据主键删除 $news->delete($id) $id为string 或者 array
         $res = Db::table('user')->delete($id);
+        $config = ['act'=>'delete','object'=>'user','name'=>UserModel::get($id)->username,'oid'=>$id,'result'=>$res];
+        Log::writeLog($config);
         if ($res) {
             $this->success(json_encode('用户删除成功'));
         } else {
@@ -83,6 +87,8 @@ class User extends Base{
         $userInfo['regtime'] = time();
         $user = new UserModel();
         $res = $user->validate(true)->allowField(true)->save($userInfo);
+        $config = ['act'=>'insert','object'=>'user','name'=>$userInfo['username'],'result'=>$res];
+        Log::writeLog($config);
         if($res){
             $this->success('用户添加成功',"user/operate");
         }else{
@@ -144,8 +150,11 @@ class User extends Base{
         if(!$userInfo['password']){
             unset($userInfo['password']);
         }
+        $id = $userInfo['id'];
         $user = new UserModel();
         $res = $user->allowField(true)->isUpdate()->save($userInfo);
+        $config = ['act'=>'update','object'=>'user','name'=>UserModel::get($id)->username,'oid'=>$id,'result'=>$res];
+        Log::writeLog($config);
         if($res===0){
             $this->success("用户数据没有改动！",$url);
         }elseif($res>0){
@@ -153,7 +162,6 @@ class User extends Base{
         } else{
             $this->error($user->getError(),$url);
         }
-
     }
 
 

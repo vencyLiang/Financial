@@ -5,6 +5,7 @@ use app\common\model\News as NewsModel;
 use app\common\model\Admin;
 use think\db\Query;
 use think\Request;
+use log\Log;
 
 class News extends Base
 {
@@ -79,6 +80,8 @@ class News extends Base
             $addNewsInfo['adminid'] = session('adminId');
             $news = new NewsModel();
             $res = $news->validate(true)->save($addNewsInfo);
+            $config = ['act'=>'insert','object'=>'news','name'=>$addNewsInfo['title'],'result'=>$res];
+            Log::writeLog($config);
             if ($res) {
                 $this->success('新闻添加成功', "news/getAdd");
             } else {
@@ -95,6 +98,8 @@ class News extends Base
             $news = new NewsModel();
             //根据主键删除 $news->delete($id) $id为string 或者 array
             $res = $news->where('id', 'IN', $id)->delete();
+            $config = ['act'=>'delete','object'=>'news','result'=>$res];
+            Log::writeLog($config);
             if ($res) {
                 $this->success(json_encode('新闻删除成功'));
             } else {
@@ -109,8 +114,7 @@ class News extends Base
         $param = Request::instance()->param();
         $id = $param['checkbox'];
         $news = new NewsModel();
-        //根据主键删除 $news->delete($id) $id为string 或者 array
-           $news->status = '1';
+        $news->status = '1';
         $res = $news->where('id', 'IN', $id)->setField('status','1');
         if ($res>=0) {
             $this->success(json_encode('新闻推荐成功'));
@@ -166,6 +170,8 @@ class News extends Base
         //where方法后不能使用allowFields方法，因为where方法返回一个Query对象，而allowFields不是该对象的成员方法。
         //用update时validate方法无效；
         $res = $news->validate(true)->isUpdate()->save($updateNewsInfo);
+        $config = ['act'=>'update','object'=>'news','oid'=>$updateNewsInfo['id'],'name'=>$updateNewsInfo['title'],'result'=>$res];
+        Log::writeLog($config);
         if($res===0){
             $this->success("新闻数据没有改动！","News/operate");
         }elseif($res>=0){

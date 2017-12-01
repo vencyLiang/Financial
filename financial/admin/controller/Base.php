@@ -10,6 +10,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Session;
 use think\Cookie;
+use log\Log;
 use app\common\model\Admin;
 
 
@@ -23,6 +24,10 @@ class Base extends Controller
                 $password = cookie('adminPassword');
                 $admin = new Admin();
                 $re = $admin->where('username', "=", $username)->where('password', '=', $password)->find();
+                $config['act'] = 'login';
+                $config['operator'] = $username;
+                $config['result'] = $re;
+                Log::writeLog($config);
                 if ($re) {
                     $loginTimes = $re->loginTimes+1;
                     session('recentLoginTime', $re->recLoginTime);

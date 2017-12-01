@@ -10,6 +10,7 @@ namespace app\admin\controller;
 use think\Cookie;
 use think\Session;
 use think\Db;
+use log\Log;
 
 class Index extends Base {
 
@@ -50,7 +51,10 @@ class Index extends Base {
             Cookie::delete('adminPassword');
         }
         //不用session destroy是为了不影响前台退出；
-        Session::delete(['adminId','adminUsername']);
+        $config['operator'] = session('adminUsername');
+        Session::delete(['adminId','adminUsername','adminPassword']);
+        $config['act'] = 'logout';
+        Log::writeLog($config);
         $this->success("退出成功！",'admin/Login/index');
     }
 }

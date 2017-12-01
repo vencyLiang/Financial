@@ -13,6 +13,7 @@ use think\Request;
 use think\Session;
 use think\Cookie;
 use app\common\model\Admin;
+use log\Log;
 
 class Login extends  Controller {
     private static $captcha;
@@ -75,6 +76,10 @@ class Login extends  Controller {
             exit;
         };
         $re = $admin->where('username', "=", $username)->where('password', '=', md5($password))->find();
+        $config['act'] = 'login';
+        $config['operator'] = $username;
+        $config['result'] = $re;
+        Log::writeLog($config);
         if ($re) {
             SESSION::set('adminId', $re->id);
             SESSION::set('adminUsername', $re->username);
