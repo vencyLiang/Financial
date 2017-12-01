@@ -138,10 +138,11 @@ class News extends  Base{
         $pubtime = $res->pubtime;
         $source = $res->source;
         $adminName = Admin::getAdminNameById($res->adminid);
+        $cancomment= $res->cancomment;
         return $this->fetch('', ['id'=>$id,'title' => $title,'content'=>$content, 'pubtime' => $pubtime,
                                             'source'=>$source,'adminName'=>$adminName,'preNewsId'=>$preNewsId,
                                             'preNewsTitle'=>$preNewsTitle,'nextNewsId'=>$nextNewsId,
-                                            'nextNewsTitle'=>$nextNewsTitle]);
+                                            'nextNewsTitle'=>$nextNewsTitle,'cancomment'=>$cancomment]);
     }
 
 }

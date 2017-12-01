@@ -1,6 +1,6 @@
-﻿<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<html>
 {include file="public/header"}
-<body>
+
     <div class="sub-banner-box">
       <div class="sub-banner">
        <img src="_FRONTPIC_/list-img.jpg">
@@ -35,7 +35,11 @@
       <a href="#" onclick="javascript:history.go(-1);" class="back">[返回列表]</a>
     </div>
   </div>
-</div>
+{if $cancomment}
+<hr style="filter: alpha(opacity=100,finishopacity = 0,style=1)" width="80%" color=#987cb9 size=3>
+{include file="news/comment"}
+{/if}
   {include file="public/footer"}
+</div>
 </body>
-
+</html>
