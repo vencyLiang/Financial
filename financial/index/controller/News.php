@@ -142,12 +142,15 @@ class News extends  AdminNews{
         $pubtime = $res->pubtime;
         $source = $res->source;
         $adminName = Admin::getAdminNameById($res->adminid);
+        $clickNum = $res->clicknum+1;
+        $res->clicknum = $clickNum;
+        $res->save();
         $canComment= $res->cancomment;
         $allCommentList = $this->getComments($id);
         return $this->fetch('', ['id'=>$id,'title' => $title,'content'=>$content, 'pubtime' => $pubtime,
                                             'source'=>$source,'adminName'=>$adminName,'preNewsId'=>$preNewsId,
                                             'preNewsTitle'=>$preNewsTitle,'nextNewsId'=>$nextNewsId,
-                                            'nextNewsTitle'=>$nextNewsTitle,'cancomment'=>$canComment,'allCommentList'=>$allCommentList]);
+                                            'nextNewsTitle'=>$nextNewsTitle,'cancomment'=>$canComment,'clickNum'=>$clickNum,'allCommentList'=>$allCommentList]);
     }
 
     function getComments($articleId){
