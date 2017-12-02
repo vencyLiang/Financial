@@ -180,7 +180,7 @@ class News extends  AdminNews{
             if($res){
                 $commentInfoArray = CommentModel::get($comment->id)->toArray();
                 $commentInfoArray['commentUser'] = UserModel::get($userId)->username;
-                UserModel::get($userId)->avatar;
+                $commentInfoArray['commentUserAvatar'] = UserModel::get($userId)->avatar;
                 return json_encode($commentInfoArray);
             }else{
                 return "error";
