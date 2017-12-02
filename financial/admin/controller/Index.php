@@ -21,7 +21,7 @@ class Index extends Base {
             '主机名'=>$_SERVER['SERVER_NAME'],
             'WEB服务端口'=>$_SERVER['SERVER_PORT'],
             '网站文档目录'=>$_SERVER["DOCUMENT_ROOT"],
-            '浏览器信息'=>substr($_SERVER['HTTP_USER_AGENT'], 0, 40),
+            '浏览器信息'=>$_SERVER['HTTP_USER_AGENT'],
             '通信协议'=>$_SERVER['SERVER_PROTOCOL'],
             '请求方法'=>$_SERVER['REQUEST_METHOD'],
             'ThinkPHP版本'=>THINK_VERSION,

@@ -1,10 +1,14 @@
 <?php
 namespace app\index\controller;
 use app\common\model\News as NewsModel;
+use app\admin\controller\News as AdminNews;
 use app\common\model\Type as TypeModel;
+use app\common\model\User as UserModel;
+use app\common\model\Comment as CommentModel;
 use app\common\model\Admin;
 use think\Request;
-class News extends  Base{
+class News extends  AdminNews{
+    use Base;
     protected  $pageSize = 2;
     protected  $pageListInfo;
     protected  $easyNewsList;
@@ -138,11 +142,51 @@ class News extends  Base{
         $pubtime = $res->pubtime;
         $source = $res->source;
         $adminName = Admin::getAdminNameById($res->adminid);
-        $cancomment= $res->cancomment;
+        $canComment= $res->cancomment;
+        $allCommentList = $this->getComments($id);
         return $this->fetch('', ['id'=>$id,'title' => $title,'content'=>$content, 'pubtime' => $pubtime,
                                             'source'=>$source,'adminName'=>$adminName,'preNewsId'=>$preNewsId,
                                             'preNewsTitle'=>$preNewsTitle,'nextNewsId'=>$nextNewsId,
-                                            'nextNewsTitle'=>$nextNewsTitle,'cancomment'=>$cancomment]);
+                                            'nextNewsTitle'=>$nextNewsTitle,'cancomment'=>$canComment,'allCommentList'=>$allCommentList]);
     }
 
+    function getComments($articleId){
+        $comment = new CommentModel();
+        $allCommentList = $comment->where('articleid', '=', $articleId)->select();
+        foreach ($allCommentList as $commentItem) {
+            $commentItem->commentUser = UserModel::get($commentItem->userid)->username;
+            $commentItem->commentUserAvatar = UserModel::get($commentItem->userid)->avatar;
+        }
+        return $allCommentList;
+
+
+
+
+
+    }
+
+    function addComment(){
+        $this->loginInfo = 1;
+        $userId = $this->loginInfo;
+        if($userId){
+            $commentInfo = Request::instance()->param();
+            $commentInfo['userid'] = $userId;
+            $commentInfo['publishtime'] = time();
+            $commentInfo['osname'] = get_os();
+            $commentInfo['browser'] = browse_info();
+            $commentInfo['userip'] = $_SERVER['REMOTE_ADDR'];
+            $comment = new CommentModel();
+            $res = $comment->allowField(true)->save();
+            if($res){
+                $commentInfoArray = CommentModel::get($comment->id)->toArray();
+                $commentInfoArray['commentUser'] = UserModel::get($userId)->username;
+                UserModel::get($userId)->avatar;
+                return json_encode($commentInfoArray);
+            }else{
+                return "error";
+            }
+        }else{
+            return "0";
+        }
+    }
 }
