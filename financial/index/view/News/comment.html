@@ -30,12 +30,13 @@
 <script type="text/javascript" src="_COMMON_/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript">
     function formatDate(timestamp) {
-        var year = timestamp.getFullYear(),
-            month = timestamp.getMonth() + 1,
-            date = timestamp.getDate(),
-            hour = timestamp.getHours(),
-            minute = timestamp.getMinutes(),
-            second = timestamp.getSeconds();
+        var d = new Date(timestamp);
+        var year = d.getFullYear(),
+            month = d.getMonth() + 1,
+            date = d.getDate(),
+            hour = d.getHours(),
+            minute = d.getMinutes(),
+            second = d.getSeconds();
         return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
     }
 

@@ -176,7 +176,7 @@ class News extends  AdminNews{
             $commentInfo['browser'] = browse_info();
             $commentInfo['userip'] = $_SERVER['REMOTE_ADDR'];
             $comment = new CommentModel();
-            $res = $comment->allowField(true)->save();
+            $res = $comment->allowField(true)->save($commentInfo);
             if($res){
                 $commentInfoArray = CommentModel::get($comment->id)->toArray();
                 $commentInfoArray['commentUser'] = UserModel::get($userId)->username;
