@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 lt8"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7 lt8"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8 lt8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="UTF-8" />
+    <title>html5注册登录框切换 - 站长素材</title>
+    <link rel="stylesheet" type="text/css" href="_FRONTLOGINCSS_/demo.css" />
+    <link rel="stylesheet" type="text/css" href="_FRONTLOGINCSS_/style.css" />
+    <link rel="stylesheet" type="text/css" href="_FRONTLOGINCSS_/animate-custom.css" />
+</head>
+<body>
+            <!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
+            <a class="hiddenanchor" id="toregister"></a>
+            <a class="hiddenanchor" id="tologin"></a>
+            <div id="wrapper">
+
+                    <div id="login" class="animate form"  >
+                        <form  id = "loginForm" autocomplete="on">
+                            <h1>Log in</h1>
+                            <p>
+                                <label for="username" class="uname" data-icon="u" >您的电子邮件或用户名</label>
+                                <input id="username" name="username" required="required" type="text" placeholder="myusername or mymail@mail.com"/>
+                            </p>
+                            <p>
+                                <label for="password" class="youpasswd" data-icon="p">密码</label>
+                                <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" />
+                            </p>
+                            <p class="keeplogin">
+                                <input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" />
+                                <label for="loginkeeping">记住登录状态</label>
+                            </p>
+                            <p class="login button">
+                                <input type="button" id='loginBtn' value="Login" />
+                            </p>
+                            <p class="change_link">
+                                还不是会员？
+                                <a href="#toregister" class="to_register">加入我们</a>
+                            </p>
+                        </form>
+                </div>
+
+                    <div id="register" class=" animate form"  >
+                        <form  id="regForm" autocomplete="on">
+
+                            <h1> Sign up </h1>
+                            <p>
+                                <label for="usernamesignup" class="uname" data-icon="u">您的用户名</label>
+                                <input id="usernamesignup" name="username" required="required" type="text" placeholder="mysuperusername690" />
+                            </p>
+                            <p>
+                                <label for="emailsignup" class="youmail" data-icon="e" > 您的电子邮箱</label>
+                                <input id="emailsignup" name="email" required="required" type="email" placeholder="mysupermail@mail.com"/>
+                            </p>
+                            <p>
+                                <label for="passwordsignup" class="youpasswd" data-icon="p">您的登录密码 </label>
+                                <input id="passwordsignup" name="password" required="required" type="password" placeholder="eg. X8df!90EO"/>
+                            </p>
+                            <p>
+                                <label for="passwordsignup_confirm" class="youpasswd" data-icon="p">请确认您的密码</label>
+                                <input id="passwordsignup_confirm" name="confirm" required="required" type="password" placeholder="eg. X8df!90EO"/>
+                            </p>
+                            <p class="signin button">
+                                <input type="button" id='regBtn' value="注册"/>
+                            </p>
+                            <p class="change_link">
+                                已经是会员 ?
+                                <a  href="#tologin" class="to_login"> 去登录</a>
+                            </p>
+                        </form>
+                    </div>
+            </div>
+<script type="text/javascript" src="_COMMON_/jquery/1.9.1/jquery.min.js"></script>
+<script src="_FRONTLOGINJS_/layui.all.js"></script>
+<script>
+$(function () {
+        $('#loginBtn').click(function () {
+        var username = $.trim($("#username").val());//获取用户名
+        var password = $.trim($("#password").val());
+        var url = "{:url('login/login')}";
+        var param = {"username": username, "password": password};
+            $.post(url, param, function(data) {
+            if (data === "1") {
+            // 先获取窗口索引，才能关闭窗口
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                } else {
+                alert("登录失败！");
+                }
+            });
+        });
+    $('#regBtn').click(function () {
+        var url = "{:url('login/register')}";
+        var param = $("#regForm").serialize();
+        $.post(url, param, function(data) {
+            if (data === "1") {
+                //调用父窗口的function addPersonalCenter(){}方法，在父窗口右上角增加一个个人中心按钮
+                window.parent.addPersonalCenter();
+                // 先获取窗口索引，才能关闭窗口
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            } else if(data==="-1"){
+                alert("输入有误，请重新填写");
+            }else{
+                alert('注册失败！')
+            }
+        });
+    });
+    });
+</script>
+</body>
+</html>

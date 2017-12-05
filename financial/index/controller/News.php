@@ -14,7 +14,6 @@ class News extends  AdminNews{
     protected  $easyNewsList;
 
     public function _initialize(){
-        parent::_initialize();
         $this->pageListInfo = $this->getPageListInfo();
         $this->easyNewsList =  $this->getEasyNewsList();
     }
@@ -162,14 +161,9 @@ class News extends  AdminNews{
         }
         return $allCommentList;
 
-
-
-
-
     }
 
     function addComment(){
-        $this->loginInfo = 1;
         $userId = $this->loginInfo;
         if($userId){
             $commentInfo = Request::instance()->param();

@@ -1,11 +1,10 @@
-﻿<div class="container">
+﻿<div class="comment-container">
 	<div class="commentbox" >
-        <img style="height: 50px;margin-left:100px;margin-top: 25px;position: absolute" src="_FRONTIMG_/comment.jpg"/>
+        <img style="height: 50px;margin-left:0px;margin-top: 25px;position: absolute" src="_FRONTIMG_/comment.jpg"/>
         <textarea cols="80" rows="50" placeholder="来说几句吧......" class="mytextarea" id="content"></textarea>
         <input type="hidden" id = "articleId"  value="{$id}">
-        <div class="btn btn-info pull-right" style="top:110px;right:230px;position:absolute"id="comment">评论</div>
+        <div class="btn btn-info pull-right" style="top:110px;right:30px;position:absolute"id="comment">评论</div>
     </div>
-
 	<div class="comment-list">
     {foreach $allCommentList as $commentItem}
         <div class="comment-info">
@@ -26,46 +25,4 @@
     {/foreach}
 	</div>
 </div>
-<script type="text/javascript" src="_COMMON_/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="_COMMON_/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript">
-    function formatDate(timestamp) {
-        //Date()方法参数的单位是毫秒；
-        var d = new Date(1000*timestamp);
-        var year = d.getFullYear(),
-            month = d.getMonth() + 1,
-            date = d.getDate(),
-            hour = d.getHours(),
-            minute = d.getMinutes(),
-            second = d.getSeconds();
-            return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
-    }
 
-    function addCommentInfo(obj){
-        var str = "<div class='comment-info'><header><img src='"+obj.commentUserAvatar+"'></header><div class='comment-right'><h3>"+obj.commentUser+"</h3>"
-            +"<div class='comment-content-header'><span><i class='glyphicon glyphicon-time'></i>"+formatDate(Number(obj.publishtime))+"</span><span><i class='glyphicon glyphicon-map-marker'></i>"
-            +obj.userip+"</span></div><p class='content'>"+obj.content+"</p><div class='comment-content-footer'><div class='row'><div class='col-md-10'><span><i class='glyphicon glyphicon-pushpin'></i> 来自:"+obj.osname+"</span><span><i class='glyphicon glyphicon-globe'></i> "+obj.browser+"</span></div></div></div>";
-        $(".comment-list").append(str);
-    }
-
-    $(function(){
-        $("#comment").click(function(){
-            $.ajax({
-                'url':"{:url('news/addComment')}",
-                'type':'post',
-                'data':{"content":$("#content").val(),"articleid":$("#articleId").val()},
-                'success':function (response) {
-                    if(response==='0'){
-                        alert('请登录！')
-                    }
-                    else if(response==='error'){
-                        alert('发表评论失败！');
-                    }else{
-                        var responseObj = $.parseJSON(response);
-                        addCommentInfo(responseObj);
-                    }
-                }
-            });
-        });
-    })
-</script>
